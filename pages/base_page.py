@@ -16,7 +16,7 @@ class BasePage:
         self.driver.get(url)
 
     def click(self, locator):
-        """Ждать кликабельность и кликнуть"""
+        """Ждать кликабельность и кликнуть по элементу"""
 
         self.wait.until(EC.element_to_be_clickable(locator)).click()
 
