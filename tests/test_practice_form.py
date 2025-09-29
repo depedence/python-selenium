@@ -1,7 +1,10 @@
-import pytest
+import allure
 from pages.forms.practice_form_page import PracticeFormPage
 
-@pytest.mark.ui
+@allure.epic("DemoQA")
+@allure.feature("Elements")
+@allure.story("Web Tables")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_practice_form_minimal_happy_path(browser):
     page = PracticeFormPage(browser)
     page.open_form()

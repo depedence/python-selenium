@@ -1,7 +1,10 @@
 from pages.elements.radio_button_page import RadioButtonPage
-import pytest
+import allure
 
-@pytest.mark.ui
+@allure.epic("DemoQA")
+@allure.feature("Elements")
+@allure.story("radio button")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_radio_button_yes(browser):
     page = RadioButtonPage(browser)
     page.open_radio()
@@ -10,7 +13,6 @@ def test_radio_button_yes(browser):
 
     assert "You have selected Yes" in page.result_text()
 
-@pytest.mark.ui
 def test_radio_button_immersive(browser):
     page = RadioButtonPage(browser)
     page.open_radio()

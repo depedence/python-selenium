@@ -1,7 +1,10 @@
-import pytest
+import allure
 from pages.elements.web_table_page import WebTablePage
 
-@pytest.mark.ui
+@allure.epic("DemoQA")
+@allure.feature("Elements")
+@allure.story("Web Tables")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_webtables_add_and_find_record(browser):
     page = WebTablePage(browser)
     page.open_tables()
