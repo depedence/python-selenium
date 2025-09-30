@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        ansiColor('xterm')
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+
+    environment {
+        // чуть более шумный лог питона
+        PYTHONUNBUFFERED = '1'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // берёт код из того же репо/ветки, где лежит Jenkinsfile
+                checkout scm
+            }
+        }
+
+        stage('Setup venv & deps') {
+            steps {
+                bat '''
+                if exist .venv rmdir /S /Q .venv
+                python -m venv .venv
+                call .venv\\Scripts\\activate
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run tests') {
+            steps {
+                bat '''
+                call .venv\\Scripts\\activate
+                pytest -v --alluredir=allure-results
+                '''
+            }
+        }
+
+        stage('Publish Allure report') {
+            steps {
+                // Требуется установленный "Allure Jenkins Plugin"
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
+        }
+    }
+
+    post {
+        always {
+            // полезно иметь артефакты даже при падении
+            archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
+        }
+    }
+}
